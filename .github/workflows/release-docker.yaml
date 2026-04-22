@@ -44,9 +44,9 @@ jobs:
           exit 1
 
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
-          ref: ${{ (github.event_name == 'workflow_dispatch' && inputs.BUILD_FROM_BRANCH) && github.ref || inputs.RELEASE_TAG || github.ref }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.BUILD_FROM_BRANCH && github.ref || inputs.RELEASE_TAG || github.ref }}
 
       - name: "Determine tag and ref"
         id: determine-tag
@@ -86,7 +86,7 @@ jobs:
       RELEASE_TAG: ${{ needs.prepare.outputs.release_tag }}
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ needs.prepare.outputs.checkout_ref }}
 
@@ -111,7 +111,7 @@ jobs:
       RELEASE_TAG: ${{ needs.prepare.outputs.release_tag }}
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ needs.prepare.outputs.checkout_ref }}
 
