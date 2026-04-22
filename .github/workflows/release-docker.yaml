@@ -43,21 +43,16 @@ jobs:
           echo "::error::RELEASE_TAG is required when BUILD_FROM_BRANCH is false"
           exit 1
 
-      - name: checkout
-        uses: actions/checkout@v5
-        with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.BUILD_FROM_BRANCH && github.ref || inputs.RELEASE_TAG || github.ref }}
-
       - name: "Determine tag and ref"
         id: determine-tag
         run: |
-          # Determine checkout ref
+          # Determine checkout ref (always explicit)
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.BUILD_FROM_BRANCH }}" = "true" ]; then
-            echo "checkout_ref=${{ github.ref }}" >> $GITHUB_OUTPUT
+            echo "checkout_ref=${GITHUB_REF}" >> $GITHUB_OUTPUT
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "checkout_ref=${{ inputs.RELEASE_TAG }}" >> $GITHUB_OUTPUT
+            echo "checkout_ref=refs/tags/${{ inputs.RELEASE_TAG }}" >> $GITHUB_OUTPUT
           else
-            echo "checkout_ref=${{ github.ref }}" >> $GITHUB_OUTPUT
+            echo "checkout_ref=${GITHUB_REF}" >> $GITHUB_OUTPUT
           fi
 
           # Determine release tag
@@ -69,13 +64,13 @@ jobs:
               # Docker tags can only contain lowercase/uppercase letters, digits, underscores, periods, and dashes
               # Also remove any leading dashes or periods
               SANITIZED_BRANCH=$(echo "$BRANCH_NAME" | sed 's/[^a-zA-Z0-9_.-]/-/g' | sed 's/^[-.]*//')
-              SHORT_SHA=$(git rev-parse --short HEAD)
+              SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
               echo "release_tag=${SANITIZED_BRANCH}-${SHORT_SHA}" >> $GITHUB_OUTPUT
             else
               echo "release_tag=${{ inputs.RELEASE_TAG }}" >> $GITHUB_OUTPUT
             fi
           else
-            echo "release_tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+            echo "release_tag=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
           fi
 
   release-amd64:
