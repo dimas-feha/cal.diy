@@ -1,6 +1,6 @@
-# Dependencies
-node_modules
-**/node_modules
+# Dependencies - node_modules is pre-installed by CI and copied in
+# Do NOT ignore node_modules here — they are required for the build
+# (yarn install runs on the CI runner, not inside Docker)
 
 # Build outputs
 .next
@@ -31,6 +31,10 @@ yarn-error.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# Yarn internals — not needed inside Docker, saves ~200MB from build context
+.yarn/cache
+.yarn/install-state.gz
 
 # Examples and docs
 docs
