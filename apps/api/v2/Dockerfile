@@ -22,8 +22,13 @@ COPY . .
 
 RUN npm install -g bun
 RUN bun install --ignore-scripts
-RUN bun --filter @calcom/api-v2 run generate-schemas
-RUN bun --filter @calcom/api-v2 run build:docker
+RUN bun --filter @calcom/prisma run generate-schemas
+RUN bun --filter @calcom/platform-constants run build && \
+    bun --filter @calcom/platform-enums run build && \
+    bun --filter @calcom/platform-utils run build && \
+    bun --filter @calcom/platform-types run build && \
+    bun --filter @calcom/platform-libraries run build && \
+    bun --filter @calcom/trpc run build:server
 RUN bun --filter @calcom/api-v2 run build
 
 EXPOSE 80
