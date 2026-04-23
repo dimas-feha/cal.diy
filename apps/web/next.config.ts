@@ -224,6 +224,7 @@ const nextConfig = (phase: string): NextConfig => {
   return {
     output: process.env.BUILD_STANDALONE === "true" ? "standalone" : undefined,
     serverExternalPackages: [
+      "deasync",
       "http-cookie-agent",
       "rest-facade",
       "superagent-proxy",
