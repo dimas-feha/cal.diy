@@ -22,7 +22,7 @@ COPY . .
 
 RUN npm install -g bun
 RUN bun install --ignore-scripts
-RUN bunx prisma generate --schema=packages/prisma/schema.prisma
+RUN bunx prisma@6.16.1 generate --schema=packages/prisma/schema.prisma
 RUN bun --filter @calcom/platform-constants run build && \
     bun --filter @calcom/platform-enums run build && \
     bun --filter @calcom/platform-utils run build && \
