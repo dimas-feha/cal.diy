@@ -113,7 +113,7 @@ jobs:
       - name: Build and test Docker image
         uses: ./.github/actions/docker-build-and-test
         with:
-          platform: "arm64"
+          platform: "linux/arm64"
           platform-suffix: "-arm"
           github-token: ${{ secrets.GITHUB_TOKEN }}
           postgres-user: ${{ env.POSTGRES_USER }}
