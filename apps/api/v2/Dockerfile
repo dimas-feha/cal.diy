@@ -15,10 +15,12 @@ ENV PYTHON=/usr/bin/python3
 ENV DATABASE_DIRECT_URL=${DATABASE_DIRECT_URL}
 ENV DATABASE_URL=${DATABASE_URL}
 ENV USE_POOL="true"
+# Prevent postinstall from running husky (requires .git which is excluded in .dockerignore)
+ENV HUSKY=0
 
 COPY . .
 
-RUN yarn install
+RUN yarn install --ignore-scripts
 RUN yarn workspace @calcom/api-v2 run generate-schemas
 RUN yarn workspace @calcom/api-v2 run build:docker
 RUN yarn workspace @calcom/api-v2 run build
