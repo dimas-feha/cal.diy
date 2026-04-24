@@ -7,6 +7,7 @@ WORKDIR /calcom
 
 RUN set -eux;
 RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
+RUN npm install -g bun
 
 ENV NODE_ENV="production"
 ENV NODE_OPTIONS="--max-old-space-size=8192"
