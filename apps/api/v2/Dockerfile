@@ -7,7 +7,6 @@ WORKDIR /calcom
 
 RUN set -eux;
 RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
-RUN npm install -g bun
 
 ENV NODE_ENV="production"
 ENV NODE_OPTIONS="--max-old-space-size=8192"
@@ -17,11 +16,11 @@ ENV USE_POOL="true"
 
 COPY . .
 
-RUN bun install
-RUN bun --filter @calcom/api-v2 run generate-schemas
-RUN bun --filter @calcom/api-v2 run build:docker
-RUN bun --filter @calcom/api-v2 run build
+RUN yarn install
+RUN yarn workspace @calcom/api-v2 run generate-schemas
+RUN yarn workspace @calcom/api-v2 run build:docker
+RUN yarn workspace @calcom/api-v2 run build
 
 EXPOSE 80
 
-CMD [ "bun", "--filter", "@calcom/api-v2", "run", "start:prod"]
+CMD [ "yarn", "workspace", "@calcom/api-v2", "start:prod"]
